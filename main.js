@@ -1,31 +1,35 @@
-function showTime(){
-    var date = new Date();
-    var h = date.getHours(); // 0 - 23
-    var m = date.getMinutes(); // 0 - 59
-    var s = date.getSeconds(); // 0 - 59
-    var session = "AM";
-    
-    if(h == 0){
-        h = 12;
-    }
-   
-    if(h > 12){
-        h = h - 12;
-        session = "PM";
-    }
-    
-    h = (h < 10) ? "0" + h : h;
-    m = (m < 10) ? "0" + m : m;
-    s = (s < 10) ? "0" + s : s;
- 
-    
-    var time = h + ":" + m + ":" + s + " " + session;
-    document.getElementById("myclock").innerText = time;
-    document.getElementById("myclock").textContent = time;
-    setTimeout(showTime, 1000);
-    
-    
+const txtBox = document.querySelector(".txtBox");
+const form = document.querySelector(".searchForm");
+const searchWord = document.querySelector(".search-word");
+const description = document.querySelector(".description");
+const dictionaryJson =
+  "https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json";
+function searchDict(e) {
+  e.preventDefault();
+  fetch(dictionaryJson)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      e.preventDefault;
+      let word = txtBox.value;
+      console.log(txtBox.value);
+      let searchKeyword = word.toUpperCase();
+      Object.keys(data).forEach(function(key) {
+        if (key === searchKeyword) {
+          searchWord.innerHTML = searchKeyword;
+          if(searchKeyword == data[key]){
+            description.innerHTML = data[key];
+          }
+          else {
+             alert("Not Found");
+          }
+          
+          
+          console.log(data[key]);
+        }
+      });
+    });
 }
 
-
-showTime();
+form.addEventListener("submit", searchDict);
